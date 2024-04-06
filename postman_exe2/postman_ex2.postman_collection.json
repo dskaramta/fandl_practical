@@ -1,0 +1,273 @@
+{
+	"info": {
+		"_postman_id": "2ece9059-cfea-4f34-b657-09a31caa8658",
+		"name": "postman_ex2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2192405",
+		"_collection_link": "https://cloudy-water-933688.postman.co/workspace/New-Team-Workspace~a87110dd-acdb-4e50-abd8-5233842d13e9/collection/2192405-2ece9059-cfea-4f34-b657-09a31caa8658?action=share&source=collection_link&creator=2192405"
+	},
+	"item": [
+		{
+			"name": "Get All Breweries and set Brewery_ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response is an object\", () => {",
+							"    pm.response.to.be.an(\"object\");",
+							"});",
+							"const firstBreweryId = pm.response.json()[0].id;",
+							"const firstBreweryName = pm.response.json()[0].name;",
+							"const firstBreweryType = pm.response.json()[0].brewery_type;",
+							"const secondBreweryId = pm.response.json()[1].id;",
+							"const thirdBreweryId = pm.response.json()[2].id;",
+							"const b_type = pm.response.json()[1].brewery_type;",
+							"pm.environment.set(\"firstBreweryId\", firstBreweryId);",
+							"pm.environment.set(\"firstBreweryName\", firstBreweryName);",
+							"pm.environment.set(\"firstBreweryType\", firstBreweryType);",
+							"pm.environment.set(\"secondBreweryId\", secondBreweryId);",
+							"pm.environment.set(\"thirdBreweryId\", thirdBreweryId);",
+							"pm.environment.set(\"b_type\", b_type);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openbrewerydb.org/v1/breweries",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openbrewerydb",
+						"org"
+					],
+					"path": [
+						"v1",
+						"breweries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Single Brewery by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response is an object\", () => {",
+							"    pm.response.to.be.an(\"object\");",
+							"});",
+							"pm.test(\"Response has expected properties\", () => {",
+							"    pm.response.to.have.property(\"id\");",
+							"    const data = pm.response.json()",
+							"    const b_name = pm.environment.get(\"firstBreweryName\");",
+							"    const b_type = pm.environment.get(\"firstBreweryType\");",
+							"    pm.expect(data).to.have.property(\"name\");",
+							"    pm.expect(data.name).to.equal(b_name)",
+							"    pm.expect(data.brewery_type).to.equal(b_type)",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openbrewerydb.org/v1/breweries/{{firstBreweryId}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openbrewerydb",
+						"org"
+					],
+					"path": [
+						"v1",
+						"breweries",
+						"{{firstBreweryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Multiple Breweries by IDs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is an object\", () => {",
+							"    pm.response.to.be.an(\"object\");",
+							"});",
+							"",
+							"pm.test(\"Number of breweries is correct\", () => {",
+							"  const breweries = pm.response.json();",
+							"  pm.expect(breweries.length).to.equal(3);",
+							"});",
+							"",
+							"pm.test(\"Only requested breweries is in reponse\", () => {",
+							"    const breweries = pm.response.json();",
+							"    const firstBreweryId = pm.environment.get(\"firstBreweryId\");",
+							"    const secondBreweryId = pm.environment.get(\"secondBreweryId\");",
+							"    const thirdBreweryId = pm.environment.get(\"thirdBreweryId\");",
+							"    pm.expect(breweries[0].id).to.equal(firstBreweryId);",
+							"    pm.expect(breweries[1].id).to.equal(secondBreweryId);",
+							"    pm.expect(breweries[2].id).to.equal(thirdBreweryId);",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openbrewerydb.org/v1/breweries?by_ids={{firstBreweryId}},{{secondBreweryId}},{{thirdBreweryId}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openbrewerydb",
+						"org"
+					],
+					"path": [
+						"v1",
+						"breweries"
+					],
+					"query": [
+						{
+							"key": "by_ids",
+							"value": "{{firstBreweryId}},{{secondBreweryId}},{{thirdBreweryId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter Brewery By type",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response is an object\", () => {",
+							"    pm.response.to.be.an(\"object\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"verify Type of all breweries\", () => {",
+							"    const b_type = pm.environment.get(\"b_type\");",
+							"    // Loop through breweries and validate type",
+							"    pm.response.json().forEach(brewery => {",
+							"        pm.expect(brewery.brewery_type).to.equal(b_type);",
+							"    });",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openbrewerydb.org/v1/breweries?by_type={{b_type}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openbrewerydb",
+						"org"
+					],
+					"path": [
+						"v1",
+						"breweries"
+					],
+					"query": [
+						{
+							"key": "by_type",
+							"value": "{{b_type}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sort and validate result",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"const responseData = pm.response.json();",
+							"const sortedCities = _.sortBy(responseData, \"city\");  ",
+							"pm.test(\"Cities are sorted in ascending order\", () => {",
+							"     for (let i = 0; i < pm.response.json().length - 1; i++) {",
+							"        pm.expect(sortedCities[i].city).to.equal(responseData[i].city)",
+							"     }",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.openbrewerydb.org/v1/breweries?sort=city:asc ",
+					"protocol": "https",
+					"host": [
+						"api",
+						"openbrewerydb",
+						"org"
+					],
+					"path": [
+						"v1",
+						"breweries"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "city:asc "
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
