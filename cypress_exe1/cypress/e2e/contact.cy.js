@@ -2,11 +2,11 @@ import ContactUsPage from "../pages/ContactUsPage"
 
 describe('Contact Page Validating', () => {
   before(() => {
+    ContactUsPage.visit()
+    ContactUsPage.acceptCookie()
   })
 
   beforeEach(() => {
-    ContactUsPage.visit()
-    ContactUsPage.acceptCookie()
   })
 
   it('verifies form elements are present and visible', () => {
@@ -42,7 +42,7 @@ describe('Contact Page Validating', () => {
       randomtext: '123bbbb',
     };
     // Enter email in incorrect format
-    ContactUsPage.emailInput().type(data.invalidemail);
+    ContactUsPage.emailInput().clear().type(data.invalidemail);
     ContactUsPage.fieldErrorMessage('email').should('have.text', "Email must be formatted correctly.");
 
     // Enter email in invalid format
@@ -55,7 +55,7 @@ describe('Contact Page Validating', () => {
     ContactUsPage.emailInput().should('have.value','test@gmail.com')
 
     //enter invalid phone number
-    ContactUsPage.mobileNumberInput().type(data.invalidNumber).blur();
+    ContactUsPage.mobileNumberInput().clear().type(data.invalidNumber).blur();
     ContactUsPage.fieldErrorMessage('mobilephone').should('have.text', "The number you entered is not in range.");
 
     //enter phone number with text
@@ -74,12 +74,12 @@ describe('Contact Page Validating', () => {
       message: 'This is a test message.'
     };
     
-    ContactUsPage.firstNameInput().type(data.firstName);
-    ContactUsPage.lastNameInput().type(data.lastName);
-    ContactUsPage.emailInput().type(data.email);
-    ContactUsPage.mobileNumberInput().type(data.mobileNumber);
+    ContactUsPage.firstNameInput().clear().type(data.firstName);
+    ContactUsPage.lastNameInput().clear().type(data.lastName);
+    ContactUsPage.emailInput().clear().type(data.email);
+    ContactUsPage.mobileNumberInput().clear().type(data.mobileNumber);
     ContactUsPage.contactMethodDropdown().select(data.contactMethod);
-    ContactUsPage.messageInput().type(data.message);
+    ContactUsPage.messageInput().clear().type(data.message);
     ContactUsPage.submitButton().scrollIntoView().click();
     //cy.get('div.hs_error_rollup > ul.hs-error-msgs label.hs-main-font-element').should('have.text', "Failed to validate Captcha. Please try again.")
   });
