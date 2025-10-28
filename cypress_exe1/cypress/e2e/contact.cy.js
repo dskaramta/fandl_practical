@@ -36,7 +36,7 @@ describe('Contact Page Validating', () => {
 
   it('verify email and mobile number with invalid values', () => {
     const data = {
-      invalidemail: 'test@test',
+      invalidemail: 'invalidemail@test',
       validFormat: 'test@gamil.com',
       invalidNumber: '23456',
       randomtext: '123bbbb',
